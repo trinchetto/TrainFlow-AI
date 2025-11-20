@@ -6,17 +6,6 @@ This file extracts PR definitions and success criteria for easier execution.
 
 ## 🔧 PR Breakdown
 
-### **PR #1 – Repo Bootstrap**
-- Initialize repo
-- Add pyproject/requirements
-- Add linting, formatting, pre-commit
-- Add basic README + dummy tests
-
-### **PR #2 – Minimal LangGraph Coach**
-- Create `coach_graph.py`
-- Implement trivial LLM node
-- Test graph with mocks
-
 ### **PR #3 – Chainlit UI**
 - Implement Chainlit app
 - Connect Chainlit handler → LangGraph node
@@ -26,10 +15,6 @@ This file extracts PR definitions and success criteria for easier execution.
 - Write Dockerfile
 - Add deployment script or instructions
 - Manual deploy validation
-
-### **PR #5 – CI**
-- Tests + lint on PR
-- Branch protection
 
 ### **PR #6 – CD**
 - Auto-build + deploy on merge to main
