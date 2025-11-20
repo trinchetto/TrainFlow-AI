@@ -28,7 +28,7 @@ jobs:
         run: poetry run pre-commit run --all-files
 
       - name: Run unit tests with coverage
-        run: poetry run pytest --cov=ai_ingredients --cov-report=term --cov-report=xml
+        run: poetry run pytest --cov=trainflow_ai --cov-report=term --cov-report=xml
 
       - name: Generate coverage badge
         run: poetry run coverage-badge -o coverage.svg -f
