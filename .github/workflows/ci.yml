@@ -16,11 +16,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-          cache: "poetry"
+          python-version: "3.12"
 
       - name: Install Poetry
-        run: pipx install poetry
+        run: pip install --upgrade poetry
 
       - name: Install dependencies
         run: poetry install
@@ -28,5 +27,11 @@ jobs:
       - name: Run pre-commit hooks
         run: poetry run pre-commit run --all-files
 
-      - name: Run pytest
-        run: poetry run pytest
+      - name: Run unit tests with coverage
+        run: poetry run pytest --cov=ai_ingredients --cov-report=term --cov-report=xml
+
+      - name: Generate coverage badge
+        run: poetry run coverage-badge -o coverage.svg -f
+
+      - name: Ensure coverage badge committed
+        run: git diff --exit-code coverage.svg

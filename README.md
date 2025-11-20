@@ -1,5 +1,7 @@
 # TrainFlow-AI
 
+![Test Coverage](./coverage.svg)
+
 TrainFlow-AI is a Python package that will power an AI-based endurance coach assistant. The repository currently ships with a tiny placeholder implementation so that tooling, tests, and automation can run end-to-end.
 
 ## Getting started
