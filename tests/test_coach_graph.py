@@ -6,6 +6,7 @@ from trainflow_ai.coach_graph import PROMPT_TEMPLATE, build_coach_graph
 
 
 def test_coach_graph_invokes_llm_with_question() -> None:
+    """Ensure the graph calls the underlying LLM with the formatted question."""
     llm = Mock(return_value="Run 5km easy")
     graph = build_coach_graph(llm)
 
@@ -19,6 +20,7 @@ def test_coach_graph_invokes_llm_with_question() -> None:
 
 
 def test_coach_graph_requires_question() -> None:
+    """Validate that missing input raises a ValueError before hitting the LLM."""
     llm = Mock(return_value="anything")
     graph = build_coach_graph(llm)
 
