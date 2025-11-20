@@ -9,6 +9,7 @@ packages = [{ include = "trainflow_ai", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
+langgraph = "^0.2.27"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.2"
@@ -38,3 +39,7 @@ warn_return_any = true
 warn_unused_configs = true
 strict = true
 mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ["langgraph.*", "pytest"]
+ignore_missing_imports = true
