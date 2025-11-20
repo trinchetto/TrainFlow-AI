@@ -33,13 +33,6 @@ jobs:
       - name: Generate coverage badge
         run: poetry run coverage-badge -o coverage.svg -f
 
-      - name: Check coverage badge changes
-        run: |
-          if git diff --quiet coverage.svg; then
-            echo "Coverage badge unchanged - no action needed"
-          else
-            echo "Coverage badge has changed but not committed"
-            echo "Please commit the updated coverage.svg file"
-            exit 1
-          fi
+      - name: Ensure coverage badge committed
+        run: git diff --exit-code coverage.svg
 
