@@ -42,3 +42,4 @@ jobs:
             echo "Please commit the updated coverage.svg file"
             exit 1
           fi
+
