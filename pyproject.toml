@@ -9,7 +9,7 @@ packages = [{ include = "trainflow_ai", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
-langgraph = "^0.2.27"
+langgraph = "^1.0.1"
 langchain-openai = "^0.2.0"
 chainlit = "^1.1.401"
 pydantic = ">=2.7,<2.10"
