@@ -33,6 +33,39 @@ An interactive [Chainlit](https://docs.chainlit.io/) workspace is included to ch
 
 3. Open the printed URL to ask questions; each prompt is passed through the graph defined in `src/trainflow_ai/coach_graph.py`.
 
+## Docker & Cloud Run
+
+1. Populate the `.env` file with the required OpenAI and Google Cloud values (placeholders are provided).
+2. Build the container:
+
+   ```bash
+   docker build -t trainflow-ai .
+   ```
+
+3. Test locally by running the container and passing the `.env` variables:
+
+   ```bash
+   docker run --rm --env-file .env -p 8000:8080 trainflow-ai
+   ```
+
+   Visit `http://localhost:8000` and chat with the assistant to confirm the deployment works. When no valid `OPENAI_API_KEY` is supplied the fallback responses are used, which still validates the Chainlit wiring.
+
+4. Deploy to Cloud Run (example):
+
+   ```bash
+   source .env
+   gcloud auth activate-service-account --key-file "$GOOGLE_APPLICATION_CREDENTIALS"
+   gcloud config set project "$GCP_PROJECT_ID"
+   gcloud run deploy "${CLOUD_RUN_SERVICE}" \
+     --image gcr.io/${GCP_PROJECT_ID}/${CLOUD_RUN_SERVICE}:latest \
+     --region "${CLOUD_RUN_REGION}" \
+     --platform managed \
+     --allow-unauthenticated \
+     --set-env-vars OPENAI_API_KEY=${OPENAI_API_KEY},OPENAI_MODEL=${OPENAI_MODEL}
+   ```
+
+   You can substitute the image reference if you push a different tag. After deployment, open the Cloud Run URL to verify the UI is reachable.
+
 ## License
 
 This project is released under the terms of the [MIT License](LICENSE).
