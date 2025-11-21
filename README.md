@@ -50,7 +50,15 @@ An interactive [Chainlit](https://docs.chainlit.io/) workspace is included to ch
 
    Visit `http://localhost:8000` and chat with the assistant to confirm the deployment works. When no valid `OPENAI_API_KEY` is supplied the fallback responses are used, which still validates the Chainlit wiring.
 
-4. Deploy to Cloud Run (example):
+4. Run the provided smoke-test script (same check used in CI):
+
+   ```bash
+   bash scripts/test_docker.sh
+   ```
+
+   This builds the image, starts it locally on port `8001`, and curls the Chainlit endpoint to verify the UI is reachable.
+
+5. Deploy to Cloud Run (example):
 
    ```bash
    source .env
@@ -64,7 +72,15 @@ An interactive [Chainlit](https://docs.chainlit.io/) workspace is included to ch
      --set-env-vars OPENAI_API_KEY=${OPENAI_API_KEY},OPENAI_MODEL=${OPENAI_MODEL}
    ```
 
-   You can substitute the image reference if you push a different tag. After deployment, open the Cloud Run URL to verify the UI is reachable.
+   You can substitute the image reference if you push a different tag. After deployment, open the Cloud Run URL to verify the UI is reachable. To replicate the CI deployment locally, run:
+
+   ```bash
+   PROJECT_ID="$GCP_PROJECT_ID" \
+   REGION="$CLOUD_RUN_REGION" \
+   SERVICE_NAME="$CLOUD_RUN_SERVICE" \
+   OPENAI_API_KEY="$OPENAI_API_KEY" \
+   bash scripts/deploy_cloud_run.sh
+   ```
 
 ## License
 
