@@ -89,3 +89,6 @@ chainlit.log
 # Misc
 .DS_Store
 Thumbs.db
+
+# Local environment secrets
+.env
