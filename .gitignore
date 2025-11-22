@@ -92,3 +92,4 @@ Thumbs.db
 
 # Local environment secrets
 .env
+.service-account.json
