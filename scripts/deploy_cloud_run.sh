@@ -23,9 +23,21 @@ if [[ -n "${OPENAI_API_KEY:-}" ]]; then
   OPENAI_FLAG=("--set-env-vars" "OPENAI_API_KEY=${OPENAI_API_KEY}")
 fi
 
+LOGS_BUCKET="${PROJECT_ID}-cloudbuild-logs"
+
+echo "Creating logs bucket if it doesn't exist..."
+gsutil mb gs://"${LOGS_BUCKET}" 2>/dev/null || echo "Bucket already exists or creation skipped"
+
 echo "Building image ${IMAGE}"
-# Use --quiet to avoid log streaming issues in CI and set timeout
-BUILD_ID=$(gcloud builds submit --tag "${IMAGE}" --format="value(id)" --timeout=10m .)
+# Use Cloud Build config with custom logs bucket
+BUILD_ID=$(gcloud builds submit \
+  --config cloudbuild.yaml \
+  --substitutions="_IMAGE=${IMAGE},_SERVICE_NAME=${SERVICE_NAME}" \
+  --format="value(id)" \
+  --timeout=10m \
+  --gcs-log-dir="gs://${LOGS_BUCKET}/logs" \
+  --gcs-source-staging-dir="gs://${LOGS_BUCKET}/staging" \
+  .)
 echo "Build completed with ID: ${BUILD_ID}"
 
 echo "Deploying to Cloud Run service ${SERVICE_NAME} in ${REGION}"

@@ -43,6 +43,9 @@ htmlcov/
 # CI/CD files
 .github/
 
+# But keep cloudbuild.yaml
+!cloudbuild.yaml
+
 # Local development
 .env.local
 .env.development
