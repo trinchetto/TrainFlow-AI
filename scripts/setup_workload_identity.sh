@@ -57,6 +57,25 @@ for role in "${ROLES[@]}"; do
         --role="$role" >/dev/null
 done
 
+# Create Cloud Build logs bucket
+LOGS_BUCKET="${PROJECT_ID}-cloudbuild-logs"
+echo "Creating Cloud Build logs bucket..."
+if gsutil ls gs://"${LOGS_BUCKET}" >/dev/null 2>&1; then
+    echo "Logs bucket already exists"
+else
+    gsutil mb gs://"${LOGS_BUCKET}"
+    echo "Created logs bucket: gs://${LOGS_BUCKET}"
+fi
+
+# Grant the service account access to the logs bucket
+gsutil iam ch serviceAccount:$SERVICE_ACCOUNT@$PROJECT_ID.iam.gserviceaccount.com:objectAdmin gs://"${LOGS_BUCKET}"
+
+# Also grant Cloud Build service account access
+CLOUDBUILD_SA="${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
+CLOUDBUILD_SA="${PROJECT_NUMBER}@cloudbuild.gserviceaccount.com"
+gsutil iam ch serviceAccount:${CLOUDBUILD_SA}:objectAdmin gs://"${LOGS_BUCKET}"
+
 # Create workload identity pool
 echo "Creating workload identity pool..."
 gcloud iam workload-identity-pools create $POOL_ID \

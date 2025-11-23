@@ -1,0 +1,15 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_IMAGE}', '.']
+    
+images: ['${_IMAGE}']
+
+options:
+  logging: GCS_ONLY
+  logStreamingOption: STREAM_OFF
+  
+substitutions:
+  _IMAGE: 'gcr.io/${PROJECT_ID}/${_SERVICE_NAME}:${SHORT_SHA}'
+  _SERVICE_NAME: 'trainflow-ai'
+
+timeout: '600s'

@@ -19,6 +19,9 @@ gcloud config set project YOUR_PROJECT_ID
 
 # Run the setup script
 ./scripts/setup_workload_identity.sh YOUR_PROJECT_ID
+
+# If you have VPC-SC restrictions, also run:
+./scripts/setup_cloudbuild_logs.sh YOUR_PROJECT_ID
 ```
 
 Replace `YOUR_PROJECT_ID` with your actual Google Cloud project ID.
