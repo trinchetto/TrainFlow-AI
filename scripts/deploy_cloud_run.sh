@@ -32,7 +32,7 @@ echo "Building image ${IMAGE}"
 # Use Cloud Build config with custom logs bucket
 BUILD_ID=$(gcloud builds submit \
   --config cloudbuild.yaml \
-  --substitutions="_IMAGE=${IMAGE},_SERVICE_NAME=${SERVICE_NAME}" \
+  --substitutions="_IMAGE_NAME=${IMAGE}" \
   --format="value(id)" \
   --timeout=10m \
   --gcs-log-dir="gs://${LOGS_BUCKET}/logs" \
