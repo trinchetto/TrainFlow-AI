@@ -76,4 +76,9 @@ jobs:
           REGION: ${{ secrets.CLOUD_RUN_REGION }}
           SERVICE_NAME: ${{ secrets.CLOUD_RUN_SERVICE }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        run: bash scripts/deploy_cloud_run.sh
+        run: |
+          echo "Starting deployment to Cloud Run..."
+          echo "Project: $PROJECT_ID"
+          echo "Region: $REGION" 
+          echo "Service: $SERVICE_NAME"
+          bash scripts/deploy_cloud_run.sh

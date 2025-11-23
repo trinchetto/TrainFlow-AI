@@ -24,7 +24,9 @@ if [[ -n "${OPENAI_API_KEY:-}" ]]; then
 fi
 
 echo "Building image ${IMAGE}"
-gcloud builds submit --tag "${IMAGE}" .
+# Use --quiet to avoid log streaming issues in CI and set timeout
+BUILD_ID=$(gcloud builds submit --tag "${IMAGE}" --format="value(id)" --timeout=10m .)
+echo "Build completed with ID: ${BUILD_ID}"
 
 echo "Deploying to Cloud Run service ${SERVICE_NAME} in ${REGION}"
 gcloud run deploy "${SERVICE_NAME}" \
@@ -32,6 +34,10 @@ gcloud run deploy "${SERVICE_NAME}" \
   --region "${REGION}" \
   --platform managed \
   --allow-unauthenticated \
+  --timeout=900 \
+  --memory=512Mi \
+  --cpu=1 \
+  --max-instances=10 \
   "${OPENAI_FLAG[@]}"
 
 SERVICE_URL=$(gcloud run services describe "${SERVICE_NAME}" --region "${REGION}" --format 'value(status.url)')
