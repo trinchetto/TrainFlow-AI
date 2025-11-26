@@ -5,8 +5,7 @@ from typing import Type
 
 import pytest
 
-from trainflow_ai import zwo_parser
-from trainflow_ai.zwo_model import (
+from trainflow_ai.zwo import (
     CooldownStep,
     FreeRideStep,
     RampStep,
@@ -15,6 +14,7 @@ from trainflow_ai.zwo_model import (
     SteadyStateStep,
     TargetKind,
     WarmupStep,
+    parse_zwo_file,
 )
 
 SAMPLE_PATH = Path(__file__).parent / "sample_files" / "sample_program.zwo"
@@ -43,7 +43,7 @@ SAMPLE_PATH = Path(__file__).parent / "sample_files" / "sample_program.zwo"
 def test_parse_sample_workouts_nominal(
     workout_index: int, expected_name: str, expected_step_types: list[Type[object]]
 ) -> None:
-    wf = zwo_parser.parse_zwo_file(SAMPLE_PATH)
+    wf = parse_zwo_file(SAMPLE_PATH)
 
     workout = wf.workouts[workout_index]
     assert workout.name == expected_name
@@ -51,7 +51,7 @@ def test_parse_sample_workouts_nominal(
 
 
 def test_parse_sample_nested_repeat_and_ramp() -> None:
-    wf = zwo_parser.parse_zwo_file(SAMPLE_PATH)
+    wf = parse_zwo_file(SAMPLE_PATH)
     tuesday = wf.workouts[1]
 
     # First repeat block: torque efforts
@@ -86,7 +86,7 @@ def test_parse_errors(bad_xml: str, tmp_path: Path) -> None:
     path = tmp_path / "bad.zwo"
     path.write_text(bad_xml)
     with pytest.raises(ValueError):
-        zwo_parser.parse_zwo_file(path)
+        parse_zwo_file(path)
 
 
 def test_parse_pace_targets_and_free_ride(tmp_path: Path) -> None:
@@ -103,7 +103,7 @@ def test_parse_pace_targets_and_free_ride(tmp_path: Path) -> None:
     path = tmp_path / "pace.zwo"
     path.write_text(xml)
 
-    wf = zwo_parser.parse_zwo_file(path)
+    wf = parse_zwo_file(path)
     steps = wf.workouts[0].steps
 
     steady = steps[0]

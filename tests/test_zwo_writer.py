@@ -4,8 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from trainflow_ai import zwo_parser
-from trainflow_ai.zwo_model import (
+from trainflow_ai.zwo import (
     CooldownStep,
     FreeRideStep,
     RampStep,
@@ -16,19 +15,20 @@ from trainflow_ai.zwo_model import (
     WarmupStep,
     Workout,
     WorkoutFile,
+    parse_zwo_file,
+    workout_file_to_string,
 )
-from trainflow_ai.zwo_writer import workout_file_to_string
 
 SAMPLE_PATH = Path(__file__).parent / "sample_files" / "sample_program.zwo"
 
 
 def test_round_trip_serialization(tmp_path: Path) -> None:
-    wf = zwo_parser.parse_zwo_file(SAMPLE_PATH)
+    wf = parse_zwo_file(SAMPLE_PATH)
     xml = workout_file_to_string(wf)
     # Write and parse again to ensure it remains valid XML
     path = tmp_path / "roundtrip.zwo"
     path.write_text(xml, encoding="utf-8")
-    wf2 = zwo_parser.parse_zwo_file(path)
+    wf2 = parse_zwo_file(path)
     assert wf2.name == wf.name
     assert len(wf2.workouts) == len(wf.workouts)
 

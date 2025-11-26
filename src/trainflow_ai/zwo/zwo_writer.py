@@ -5,7 +5,7 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-from trainflow_ai.zwo_model import (
+from trainflow_ai.zwo.zwo_model import (
     CooldownStep,
     FreeRideStep,
     RampStep,
