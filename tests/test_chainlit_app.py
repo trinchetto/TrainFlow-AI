@@ -102,8 +102,7 @@ def test_openai_llm_uses_chatopenai(monkeypatch: pytest.MonkeyPatch) -> None:
             captured["prompt"] = prompt
             return "raw-response"
 
-    fake_module = SimpleNamespace(ChatOpenAI=FakeChat)
-    monkeypatch.setitem(sys.modules, "langchain_openai", fake_module)
+    monkeypatch.setattr(app, "ChatOpenAI", FakeChat)
     monkeypatch.setattr(app, "_serialize_response", lambda message: f"serialized:{message}")
     monkeypatch.setenv("OPENAI_MODEL", "gpt-test")
     monkeypatch.setenv("OPENAI_TEMPERATURE", "0.75")
