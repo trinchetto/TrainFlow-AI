@@ -5,6 +5,7 @@ from __future__ import annotations
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from trainflow_ai.logging_utils import StructuredLogger
 from trainflow_ai.zwo.zwo_model import (
     CooldownStep,
     FreeRideStep,
@@ -19,6 +20,8 @@ from trainflow_ai.zwo.zwo_model import (
     Workout,
     WorkoutFile,
 )
+
+logger = StructuredLogger("trainflow_ai.zwo.writer")
 
 
 def _target_attrs(target: Target) -> dict[str, str]:
@@ -105,15 +108,19 @@ def workout_file_to_element(workout_file: WorkoutFile) -> ET.Element:
     return root
 
 
+@logger.with_error_handling(reraise=True)
 def workout_file_to_string(workout_file: WorkoutFile) -> str:
     """Serialize a WorkoutFile to a pretty-printed XML string."""
+    logger.debug("Serializing workout file to XML", workouts=len(workout_file.workouts))
     root = workout_file_to_element(workout_file)
     return ET.tostring(root, encoding="unicode")
 
 
+@logger.with_error_handling(reraise=True)
 def save_workout_file(workout_file: WorkoutFile, path: str | Path) -> Path:
     """Save a WorkoutFile to disk as .zwo."""
     xml_str = workout_file_to_string(workout_file)
     p = Path(path)
     p.write_text(xml_str, encoding="utf-8")
+    logger.info("Saved ZWO workout file", path=str(p))
     return p

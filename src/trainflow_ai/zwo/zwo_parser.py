@@ -7,6 +7,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Iterable, List, Optional, Tuple, cast
 
+from trainflow_ai.logging_utils import StructuredLogger
 from trainflow_ai.zwo.zwo_model import (
     CooldownStep,
     FreeRideStep,
@@ -21,6 +22,8 @@ from trainflow_ai.zwo.zwo_model import (
     Workout,
     WorkoutFile,
 )
+
+logger = StructuredLogger("trainflow_ai.zwo.parser")
 
 
 def _parse_target(
@@ -125,9 +128,11 @@ def _child_elements(element: ET.Element) -> Iterable[ET.Element]:
             yield child
 
 
+@logger.with_error_handling(reraise=True)
 def parse_zwo_file(path: str | Path) -> WorkoutFile:
     """Parse a ZWO file into a WorkoutFile model."""
     raw = Path(path).read_text(encoding="utf-8")
+    logger.debug("Parsing ZWO file", path=str(path))
     # Escape bare ampersands often found in real-world ZWO attribute values.
     sanitized = re.sub(r"&(?!(amp;|lt;|gt;|quot;|apos;))", "&amp;", raw)
     root = ET.fromstring(sanitized)
@@ -148,6 +153,12 @@ def parse_zwo_file(path: str | Path) -> WorkoutFile:
         steps: List[Step] = [_parse_step(step_el) for step_el in _child_elements(workout_el)]
         workouts.append(Workout(name=workout_name, steps=steps))
 
+    logger.info(
+        "Parsed ZWO workout file",
+        path=str(path),
+        workouts=len(workouts),
+        tags=len(tags),
+    )
     return WorkoutFile(
         author=author,
         name=name,
