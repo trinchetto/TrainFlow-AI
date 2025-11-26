@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workout_file>
+  <author>AI Assistant – Gravel Hybrid Polarized-Block</author>
+  <name>Hybrid Block Week 2 – Aggressive (17–23 Nov)</name>
+  <description>Settimana 2 – Metodo Hybrid Polarized-Block (Aggressivo). FTP 330 W. Obiettivo: mantenimento carico alto, sviluppo VO2max e capacità gara gravel.</description>
+  <sportType>bike</sportType>
+  <tags>gravel, endurance, vo2max, torque, race simulation</tags>
+
+  <!-- Lunedì – Recupero attivo -->
+  <workout name="Lunedì – Recupero e mobilità (30’)">
+    <Warmup Duration="600" Power="132" />
+    <SteadyState Duration="900" Power="149" />
+    <Cooldown Duration="600" Power="116" />
+  </workout>
+
+  <!-- Martedì – Torque + Sprint -->
+  <workout name="Martedì – Torque + Sprint (Forza & Esplosività)">
+    <Warmup Duration="600" Power="165" />
+    <Repeat Repeat="3">
+      <SteadyState Duration="240" Power="314" Cadence="55" />
+      <Rest Duration="240" Power="182" />
+    </Repeat>
+    <Repeat Repeat="6">
+      <Ramp Duration="20" PowerLow="363" PowerHigh="495" Cadence="100" />
+      <Rest Duration="180" Power="165" />
+    </Repeat>
+    <Cooldown Duration="600" Power="132" />
+  </workout>
+
+  <!-- Mercoledì – Sweetspot -->
+  <workout name="Mercoledì – Sweetspot Z3-Z4 (Soglia Prolungata)">
+    <Warmup Duration="600" Power="198" />
+    <Repeat Repeat="4">
+      <SteadyState Duration="900" Power="281" />
+      <Rest Duration="300" Power="198" />
+    </Repeat>
+    <Cooldown Duration="600" Power="165" />
+  </workout>
+
+  <!-- Giovedì – VO2max 40/20 -->
+  <workout name="Giovedì – VO2max 40/20 (Alta Intensità)">
+    <Warmup Duration="600" Power="198" />
+    <Repeat Repeat="3">
+      <Repeat Repeat="6">
+        <SteadyState Duration="40" Power="396" />
+        <Rest Duration="20" Power="182" />
+      </Repeat>
+      <Rest Duration="360" Power="182" />
+    </Repeat>
+    <Cooldown Duration="600" Power="149" />
+  </workout>
+
+  <!-- Venerdì – Recupero -->
+  <workout name="Venerdì – Recupero Facile (1h)">
+    <Warmup Duration="600" Power="132" />
+    <SteadyState Duration="1800" Power="182" />
+    <Cooldown Duration="600" Power="132" />
+  </workout>
+
+  <!-- Sabato – Simulazione Gara -->
+  <workout name="Sabato – Simulazione Gara Gravel (4h)">
+    <Warmup Duration="900" Power="182" />
+    <Repeat Repeat="3">
+      <SteadyState Duration="1800" Power="297" />
+      <Rest Duration="600" Power="198" />
+    </Repeat>
+    <SteadyState Duration="900" Power="314" />
+    <Cooldown Duration="600" Power="149" />
+  </workout>
+
+  <!-- Domenica – Recupero -->
+  <workout name="Domenica – Recupero Rigenerante (60’)">
+    <Warmup Duration="600" Power="149" />
+    <SteadyState Duration="2400" Power="182" />
+    <Cooldown Duration="600" Power="132" />
+  </workout>
+
+</workout_file>
