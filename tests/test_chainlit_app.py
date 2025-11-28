@@ -70,17 +70,22 @@ class DummyMessage:
         self.content = content
 
 
-_fallback_obj = object()
+class _FallbackObj:
+    def __repr__(self) -> str:
+        return "<fallback-object>"
 
 
-@pytest.mark.parametrize(  # type: ignore[misc]
+_fallback_obj = _FallbackObj()
+
+
+@pytest.mark.parametrize(
     ("message", "expected"),
     [
         ("simple", "simple"),
         (DummyMessage("attr str"), "attr str"),
         (DummyMessage([{"type": "text", "text": "A"}, {"type": "text", "text": "B"}]), "AB"),
         (DummyMessage([DummyChunk("hello"), DummyChunk(" world")]), "hello world"),
-        (_fallback_obj, str(_fallback_obj)),
+        (_fallback_obj, "<fallback-object>"),
     ],
 )
 def test_serialize_response_variants(message: Any, expected: str) -> None:

@@ -1,0 +1,6 @@
+<!-- Lunedì – Recupero attivo -->
+  <workout name="Lunedì – Recupero e mobilità (30’)">
+    <Warmup Duration="600" Power="132" />
+    <SteadyState Duration="900" Power="149" />
+    <Cooldown Duration="600" Power="116" />
+  </workout>

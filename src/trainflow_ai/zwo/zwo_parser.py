@@ -25,6 +25,9 @@ from trainflow_ai.zwo.zwo_model import (
 
 logger = StructuredLogger("trainflow_ai.zwo.parser")
 
+STEP_TAGS = {"Warmup", "SteadyState", "Cooldown", "Rest", "Ramp", "FreeRide", "Freeride", "Repeat"}
+WORKOUT_METADATA_TAGS = {"name", "description", "tags"}
+
 
 def _parse_target(
     element: ET.Element, *, low_key: str | None = None, high_key: str | None = None
@@ -149,8 +152,14 @@ def parse_zwo_file(path: str | Path) -> WorkoutFile:
 
     workouts: List[Workout] = []
     for workout_el in root.findall("workout"):
-        workout_name = workout_el.get("name") or "Untitled Workout"
-        steps: List[Step] = [_parse_step(step_el) for step_el in _child_elements(workout_el)]
+        workout_name = workout_el.get("name") or workout_el.findtext("name") or "Untitled Workout"
+        steps: List[Step] = []
+        for step_el in _child_elements(workout_el):
+            if step_el.tag in WORKOUT_METADATA_TAGS:
+                continue
+            if step_el.tag not in STEP_TAGS:
+                raise ValueError(f"Unsupported element <{step_el.tag}> inside <workout>")
+            steps.append(_parse_step(step_el))
         workouts.append(Workout(name=workout_name, steps=steps))
 
     logger.info(

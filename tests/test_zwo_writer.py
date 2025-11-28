@@ -19,11 +19,20 @@ from trainflow_ai.zwo import (
     workout_file_to_string,
 )
 
-SAMPLE_PATH = Path(__file__).parent / "sample_files" / "sample_program.zwo"
+SAMPLE_PROGRAM_1 = Path(__file__).parent / "sample_files" / "sample_program_1.zwo"
+SAMPLE_PROGRAM_2 = Path(__file__).parent / "sample_files" / "sample_program_2.zwo"
+SAMPLE_PROGRAM_3 = Path(__file__).parent / "sample_files" / "sample_program_3.zwo"
+SAMPLE_PROGRAMS = [SAMPLE_PROGRAM_1, SAMPLE_PROGRAM_2, SAMPLE_PROGRAM_3]
 
 
-def test_round_trip_serialization(tmp_path: Path) -> None:
-    wf = parse_zwo_file(SAMPLE_PATH)
+@pytest.mark.parametrize("sample_path", SAMPLE_PROGRAMS)
+def test_round_trip_serialization(tmp_path: Path, sample_path: Path) -> None:
+    if sample_path.name == "sample_program_3.zwo":
+        with pytest.raises(ValueError):
+            parse_zwo_file(sample_path)
+        return
+
+    wf = parse_zwo_file(sample_path)
     xml = workout_file_to_string(wf)
     # Write and parse again to ensure it remains valid XML
     path = tmp_path / "roundtrip.zwo"
@@ -33,7 +42,7 @@ def test_round_trip_serialization(tmp_path: Path) -> None:
     assert len(wf2.workouts) == len(wf.workouts)
 
 
-@pytest.mark.parametrize(  # type: ignore[misc]
+@pytest.mark.parametrize(
     "step",
     [
         WarmupStep(duration_seconds=60, target=Target(TargetKind.POWER, 0.5)),
