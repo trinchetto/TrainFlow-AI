@@ -6,16 +6,6 @@ Milestone focus: introduce FIT/ZWO parsing and generation tools, wire them into 
 
 ## Planned PRs to Hit M1
 
-1) **Scaffolding + Fixtures**
-   - Add FIT/ZWO sample files in `tests/fixtures`.
-   - Define shared data model for workouts (internal representation used by both formats).
-   - Document file formats and assumptions.
-2) **FIT Parse/Generate**
-   - Implement FIT parser → internal model; round-trip generator → FIT.
-   - Unit tests for happy/error paths and round-trip.
-3) **ZWO Parse/Generate**
-   - Implement ZWO parser → internal model; round-trip generator → ZWO.
-   - Unit tests parallel to FIT coverage.
 4) **Tool Abstractions**
    - Expose unified tool interface (parse/generate) for FIT/ZWO.
    - Validation and error surfacing; structured logging.

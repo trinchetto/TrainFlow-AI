@@ -17,33 +17,48 @@ from trainflow_ai.zwo import (
     parse_zwo_file,
 )
 
-SAMPLE_PATH = Path(__file__).parent / "sample_files" / "sample_program.zwo"
+SAMPLE_PROGRAM_1 = Path(__file__).parent / "sample_files" / "sample_program_1.zwo"
+SAMPLE_PROGRAM_2 = Path(__file__).parent / "sample_files" / "sample_program_2.zwo"
+SAMPLE_PROGRAM_3 = Path(__file__).parent / "sample_files" / "sample_program_3.zwo"
+SAMPLE_PROGRAMS = [SAMPLE_PROGRAM_1, SAMPLE_PROGRAM_2, SAMPLE_PROGRAM_3]
 
 
-@pytest.mark.parametrize(  # type: ignore[misc]
-    ("workout_index", "expected_name", "expected_step_types"),
+@pytest.mark.parametrize(
+    ("sample_path", "workout_index", "expected_name", "expected_step_types"),
     [
         (
+            SAMPLE_PROGRAM_1,
             0,
             "Lunedì – Recupero e mobilità (30’)",
             [WarmupStep, SteadyStateStep, CooldownStep],
         ),
         (
+            SAMPLE_PROGRAM_1,
             1,
             "Martedì – Torque + Sprint (Forza & Esplosività)",
             [WarmupStep, RepeatBlock, RepeatBlock, CooldownStep],
         ),
         (
+            SAMPLE_PROGRAM_1,
             3,
             "Giovedì – VO2max 40/20 (Alta Intensità)",
             [WarmupStep, RepeatBlock, CooldownStep],
         ),
+        (
+            SAMPLE_PROGRAM_2,
+            0,
+            "Giorno_1",
+            [SteadyStateStep, SteadyStateStep, SteadyStateStep],
+        ),
     ],
 )
 def test_parse_sample_workouts_nominal(
-    workout_index: int, expected_name: str, expected_step_types: list[Type[object]]
+    sample_path: Path,
+    workout_index: int,
+    expected_name: str,
+    expected_step_types: list[Type[object]],
 ) -> None:
-    wf = parse_zwo_file(SAMPLE_PATH)
+    wf = parse_zwo_file(sample_path)
 
     workout = wf.workouts[workout_index]
     assert workout.name == expected_name
@@ -51,7 +66,7 @@ def test_parse_sample_workouts_nominal(
 
 
 def test_parse_sample_nested_repeat_and_ramp() -> None:
-    wf = parse_zwo_file(SAMPLE_PATH)
+    wf = parse_zwo_file(SAMPLE_PROGRAM_1)
     tuesday = wf.workouts[1]
 
     # First repeat block: torque efforts
@@ -74,7 +89,7 @@ def test_parse_sample_nested_repeat_and_ramp() -> None:
     assert ramp.target_end.value == 495  # noqa: PLR2004
 
 
-@pytest.mark.parametrize(  # type: ignore[misc]
+@pytest.mark.parametrize(
     "bad_xml",
     [
         "<workout_file><workout><SteadyState Power='200'/></workout></workout_file>",  # missing Duration
@@ -119,3 +134,14 @@ def test_parse_pace_targets_and_free_ride(tmp_path: Path) -> None:
     free = steps[2]
     assert isinstance(free, FreeRideStep)
     assert free.target is None
+
+
+@pytest.mark.parametrize("sample_path", SAMPLE_PROGRAMS)
+def test_parse_all_sample_programs(sample_path: Path) -> None:
+    if sample_path.name == "sample_program_3.zwo":
+        with pytest.raises(ValueError):
+            parse_zwo_file(sample_path)
+        return
+
+    wf = parse_zwo_file(sample_path)
+    assert wf.workouts

@@ -19,6 +19,7 @@ TrainFlow-AI is a Python package that will power an AI-based endurance coach ass
    poetry run pre-commit run --all-files
    poetry run pytest
    ```
+   Pytest is configured to run with `-n auto`, so tests execute in parallel both locally and in CI. To force a single process run (for debugging), use `poetry run pytest -n 1`.
 
 ## Chainlit UI
 

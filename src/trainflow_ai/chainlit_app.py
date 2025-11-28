@@ -16,6 +16,13 @@ logger = StructuredLogger("trainflow_ai.chainlit_app", os.getenv("LOG_LEVEL", "I
 
 DEFAULT_OPENAI_MODEL = "gpt-4o-mini"
 GraphRunner = Callable[[CoachState], Awaitable[CoachState]]
+ChatStartDecorator = Callable[[Callable[[], Awaitable[None]]], Callable[[], Awaitable[None]]]
+OnMessageDecorator = Callable[
+    [Callable[[cl.Message], Awaitable[None]]], Callable[[cl.Message], Awaitable[None]]
+]
+
+on_chat_start_decorator = cast(ChatStartDecorator, cl.on_chat_start)
+on_message_decorator = cast(OnMessageDecorator, cl.on_message)
 
 
 @logger.with_error_handling(fallback_response="Error: Could not serialize response")
@@ -106,7 +113,7 @@ def _get_runner() -> GraphRunner:
     return runner
 
 
-@cl.on_chat_start  # type: ignore[misc]
+@on_chat_start_decorator
 @logger.with_error_handling(reraise=True)
 async def on_chat_start() -> None:
     """Initialize the LangGraph runner when the user session begins."""
@@ -132,7 +139,7 @@ async def on_chat_start() -> None:
     logger.info("Chat session initialized successfully", session_id=session_id)
 
 
-@cl.on_message  # type: ignore[misc]
+@on_message_decorator
 @logger.with_error_handling(reraise=True)
 async def on_message(message: cl.Message) -> None:
     """Forward the user prompt to the LangGraph pipeline and surface the result."""
