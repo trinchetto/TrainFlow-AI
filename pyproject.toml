@@ -11,7 +11,7 @@ packages = [{ include = "trainflow_ai", from = "src" }]
 python = "^3.12"
 langgraph = "^1.0.4"
 langchain-openai = "^1.1.0"
-chainlit = "^2.9.2"
+chainlit = "^2.9.3"
 pydantic = ">=2.7,<2.13"
 fit-tool = "^0.9.13"
 
