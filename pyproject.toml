@@ -16,7 +16,7 @@ pydantic = ">=2.7,<2.13"
 fit-tool = "^0.9.13"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^9.0.1"
+pytest = "^9.0.2"
 pre-commit = "^4.4.0"
 ruff = "^0.14.8"
 mypy = "^1.11.1"
