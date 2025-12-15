@@ -18,7 +18,7 @@ fit-tool = "^0.9.13"
 [tool.poetry.group.dev.dependencies]
 pytest = "^9.0.2"
 pre-commit = "^4.4.0"
-ruff = "^0.14.8"
+ruff = "^0.14.9"
 mypy = "^1.11.1"
 pytest-cov = ">=5.0"
 coverage-badge = ">=1.1"
