@@ -1,0 +1,11 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '$_IMAGE_NAME', '.']
+
+images: ['$_IMAGE_NAME']
+
+options:
+  logging: GCS_ONLY
+  logStreamingOption: STREAM_OFF
+
+timeout: '600s'

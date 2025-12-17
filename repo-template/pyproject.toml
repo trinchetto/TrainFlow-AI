@@ -1,0 +1,50 @@
+[tool.poetry]
+name = "{{PROJECT_NAME}}"
+version = "0.1.0"
+description = "{{PROJECT_DESCRIPTION}}"
+authors = ["{{AUTHOR_NAME}} <{{AUTHOR_EMAIL}}>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "{{PACKAGE_NAME}}", from = "src" }]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+# Add your project dependencies here
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^9.0.2"
+pre-commit = "^4.4.0"
+ruff = "^0.14.8"
+mypy = "^1.11.1"
+pytest-cov = ">=5.0"
+coverage-badge = ">=1.1"
+pytest-xdist = "^3.6.1"
+
+[build-system]
+requires = ["poetry-core>=1.8.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-n auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "PL"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+strict = true
+mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ["tests", "tests.*"]
+disable_error_code = ["misc"]
+allow_untyped_decorators = true
